@@ -25,6 +25,13 @@ rule read = parse
   | "print"         { PRINT }
   | "true"          { TRUE }
   | "false"         { FALSE }
+  | "+"             { PLUS }
+  | "*"             { TIMES }
+  | "-"             { SUB }
+  | "="             { EQUALS }
+  | "<="            { LEQ }
+  | "||"            { OR }
+  | "&&"            { AND }
   | num as num      { NUM (int_of_string num) }
   | id as id        { ID id }
   | eof             { EOF }

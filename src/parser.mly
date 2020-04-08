@@ -11,13 +11,22 @@ exception ParseException of string
 %token EOF
 %token <int> NUM
 %token <string> ID
+%token PLUS
+%token TIMES
+%token SUB
+%token EQUALS
+%token LEQ
 %token SKIP
 %token TRUE
 %token FALSE
+%token AND 
+%token OR 
 %token PRINT
 
 (* Precedences *)
-
+%left PLUS SUB
+%left TIMES
+%left OR AND
 
 
 (* After declaring associativity and precedence, we need to declare what
@@ -41,16 +50,34 @@ com:
   | SKIP;
     { Skip }
   | PRINT; a = aexp;
-    { Print(a) }
+    { Printa(a) }
+  | PRINT; b = bexp;
+    { Printb(b) }
 
 bexp:
   | TRUE;
     { True }
   | FALSE;
     { False }
+  | a1 = aexp; EQUALS; a2 = aexp;
+    { Eq(a1, a2) }
+  | a1 = aexp; LEQ; a2 = aexp;
+    { Leq(a1, a2) }
+  | b1 = bexp; OR; b2 = bexp;
+    { Or(b1, b2) }
+  | b1 = bexp; AND; b2 = bexp;
+    { And(b1, b2) }
 
 aexp:
   | n = NUM;
     { Num(n) }
+  | x = ID;
+    { Var(x) }
+  | a1 = aexp; PLUS; a2 = aexp;
+    { Plus(a1, a2) }
+  | a1 = aexp; TIMES; a2 = aexp;
+    {Mult(a1, a2) }
+  | a1 = aexp; SUB; a2 = aexp;
+    {Sub(a1, a2) }
 
 %%
