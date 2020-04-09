@@ -11,6 +11,9 @@ exception ParseException of string
 %token EOF
 %token <int> NUM
 %token <string> ID
+%token SEMICOLON
+%token IF
+%token ELSE 
 %token PLUS
 %token TIMES
 %token SUB
@@ -53,6 +56,12 @@ com:
     { Printa(a) }
   | PRINT; b = bexp;
     { Printb(b) }
+  | x = ID; EQUALS; a = aexp;
+    { Assign(x, a) }
+  | c1 = com; SEMICOLON; c2 = com;
+    { Seq(c1, c2) }
+  | IF; b = bexp; c1 = com; ELSE; c2 = com;
+    { Cond(b, c1, c2) }
 
 bexp:
   | TRUE;

@@ -15,6 +15,9 @@ type bexp =
 
 type com = 
   | Skip
+  | Assign of string * aexp
+  | Seq of com * com
+  | Cond of bexp * com * com
   (* We add print as a command for ease of use *)
   (* The semantics are just evaluate aexp until we get a number *)
   (* Then print that number and return "Skip" *)

@@ -25,6 +25,8 @@ rule read = parse
   | "print"         { PRINT }
   | "true"          { TRUE }
   | "false"         { FALSE }
+  | "if"            { IF }
+  | "else"          { ELSE }
   | "+"             { PLUS }
   | "*"             { TIMES }
   | "-"             { SUB }
@@ -32,6 +34,7 @@ rule read = parse
   | "<="            { LEQ }
   | "||"            { OR }
   | "&&"            { AND }
+  | ";"             { SEMICOLON }
   | num as num      { NUM (int_of_string num) }
   | id as id        { ID id }
   | eof             { EOF }

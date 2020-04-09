@@ -51,28 +51,15 @@ let rec step_bexp (b : bexp) (s: sigma): bool =
     |true, true -> true
     | _ -> false)
 
-let rec step_com (c : com) (s: sigma): com =
+let rec step_com (c : com) (s: sigma): sigma =
   match c with
   | Skip -> failwith "No evaluation possible for skip"
-  | Printa a -> (match a with
-    | Num n -> print_endline (string_of_int n); Skip
-    | Var x -> print_endline (x); Skip
-    | Plus (a1, a2) -> (match step_aexp a1 s , step_aexp a2 s with
-      | n1, n2 -> print_endline(string_of_int n1 ^ " + " ^ string_of_int n2); Skip)
-    | Mult (a1, a2) -> (match step_aexp a1 s , step_aexp a2 s with
-      | n1, n2 -> print_endline(string_of_int n1 ^ " * " ^ string_of_int n2); Skip)
-    | Sub (a1, a2) -> (match step_aexp a1 s , step_aexp a2 s with
-      | n1, n2 -> print_endline(string_of_int n1 ^ " - " ^ string_of_int n2); Skip))
-  | Printb b -> (match b with 
-    | True -> print_string "True"; Skip
-    | False -> print_string "False"; Skip
-    | Eq (a1, a2) -> print_string "equals"; Skip
-    | Leq (a1, a2) -> print_string "leq"; Skip
-    | Or (b1, b2) -> print_string "or"; Skip
-    | And (b1, b2) -> print_string "and"; Skip)
+  | Assign (x,a) -> Assoc.update x (step_aexp a s) s
+  | Seq (c1, c2) -> step_com c2 (step_com c1 s)
+  | Cond (b, c1, c2) -> if (step_bexp b s) then (step_com c1 s) else (step_com c2 s)
+  | Printa a -> print_string (string_of_int (step_aexp a s)); s
+  | Printb b -> print_string (string_of_bool (step_bexp b s)); s
 
-let rec eval_prog (p : prog) : unit =
+let rec eval_prog (p: prog) : unit =
   let s: sigma = Assoc.empty in 
-  match p with
-  | Skip -> ()
-  | _ -> eval_prog (step_com p s)
+  ignore (step_com p s) 

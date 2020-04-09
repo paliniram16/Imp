@@ -1,0 +1,52 @@
+
+** Conflict (shift/reduce) in state 33.
+** Token involved: SEMICOLON
+** This state is reached from main after reading:
+
+IF bexp com ELSE com 
+
+** The derivations that appear below have the following common factor:
+** (The question mark symbol (?) represents the spot where the derivations begin to differ.)
+
+main 
+com EOF 
+(?)
+
+** In state 33, looking ahead at SEMICOLON, shifting is permitted
+** because of the following sub-derivation:
+
+IF bexp com ELSE com 
+                 com . SEMICOLON com 
+
+** In state 33, looking ahead at SEMICOLON, reducing production
+** com -> IF bexp com ELSE com 
+** is permitted because of the following sub-derivation:
+
+com SEMICOLON com // lookahead token appears
+IF bexp com ELSE com . 
+
+** Conflict (shift/reduce) in state 31.
+** Token involved: SEMICOLON
+** This state is reached from main after reading:
+
+com SEMICOLON com 
+
+** The derivations that appear below have the following common factor:
+** (The question mark symbol (?) represents the spot where the derivations begin to differ.)
+
+main 
+com EOF 
+(?)
+
+** In state 31, looking ahead at SEMICOLON, shifting is permitted
+** because of the following sub-derivation:
+
+com SEMICOLON com 
+              com . SEMICOLON com 
+
+** In state 31, looking ahead at SEMICOLON, reducing production
+** com -> com SEMICOLON com 
+** is permitted because of the following sub-derivation:
+
+com SEMICOLON com // lookahead token appears
+com SEMICOLON com . 
