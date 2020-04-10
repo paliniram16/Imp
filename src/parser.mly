@@ -13,6 +13,7 @@ exception ParseException of string
 %token <string> ID
 %token SEMICOLON
 %token IF
+%token THEN 
 %token ELSE 
 %token PLUS
 %token TIMES
@@ -60,7 +61,7 @@ com:
     { Assign(x, a) }
   | c1 = com; SEMICOLON; c2 = com;
     { Seq(c1, c2) }
-  | IF; b = bexp; c1 = com; ELSE; c2 = com;
+  | IF; b = bexp; THEN; c1 = com; ELSE; c2 = com;
     { Cond(b, c1, c2) }
 
 bexp:
